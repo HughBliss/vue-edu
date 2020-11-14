@@ -1,26 +1,54 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <input type="text" v-model="input">
+
+  <div class="grid-container">
+    <div class="grid-row" v-for="row in btns" :key="row">
+      <div class="grid-cell" v-for="btn in row" :key="btn">
+        <button v-if="btn === 'c'" @click="backspace">
+          {{ btn }}
+        </button>
+        <button v-else-if="btn === '='" @click="exec">
+          {{ btn }}
+        </button>
+        <button v-else @click="click(btn)">
+          {{ btn }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+  <h1>{{ result }}</h1>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  data: () => ({
+    input: '',
+    result: '',
+    btns: [
+      [7, 8, 9, '+'],
+      [4, 5, 6, '-'],
+      [1, 2, 3, '*'],
+      ['=', 0, 'c', '/']
+    ]
+  }),
+  methods: {
+    click (e) {
+      this.input += e
+    },
+    backspace () {
+      if (this.input) {
+        this.input = this.input.slice(-1)
+      }
+    },
+    exec () {
+      // const num = parseInt(this.number) || 0
+      // eslint-disable-next-line no-eval
+      this.result = eval(this.input)
+    }
+  },
+  components: {}
+
 }
 </script>
-
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
